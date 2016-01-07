@@ -22,10 +22,13 @@ var getPageCoords = function(e) {
 	};
 };
 
+var ignorePoint = false;
+
 Template.studio.events({
     'mousedown #studioCanvas, touchstart #studioCanvas': function(e){
   		context.strokeStyle = "#FFF";
-  		context.lineJoin = "round";
+      context.lineJoin = "round";
+      context.lineCap = "round";
   		context.lineWidth = 5;
   		context.beginPath();
   		var offset = canvas.offset();
@@ -34,7 +37,8 @@ Template.studio.events({
   		dragging = true;
     },
     'mousemove #studioCanvas': function(e){
-		if (dragging) {
+    ignorePoint = !ignorePoint;
+		if (dragging && !ignorePoint) {
 			var offset = canvas.offset();
 			var pageCoords = getPageCoords(e);
 			context.lineTo(pageCoords.x - offset.left, pageCoords.y - offset.top);
